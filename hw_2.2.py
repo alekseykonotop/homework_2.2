@@ -15,28 +15,52 @@
 
 
 
-from chardet.universaldetector import UniversalDetector
+import chardet
 
-# import chardet
+
+with open('newscy.txt', 'rb') as f:
+    data = f.read()
+    # print(data[:50])
+    result = chardet.detect(data)
+    print(result)
+    s = data.decode(result['encoding'])
+    print('s', s[:350])
+
+
+
 #
 #
-# with open('newscy.txt', 'rb') as f:
-#     data = f.read()
-#     # print(data[:50])
-#     result = chardet.detect(data)
-#     print(result)
-#     s = data.decode(result['encoding'])
-#     print('s', s[:350])
-
-# detector = UniversalDetector()
 #
-# with open('newscy.txt', 'rb') as f:
-#     for line in f:
-#         detector.feed(line)
-#         if detector.done:
-#             print(detector.result)
-#             break
-# detector.close()
-# print(detector.result)
+#
+#
+# Функ. открытия и декодирования файла
+# Функ. создает множество значений слов из текста
+# Функ. подсчета, сколько каждое слово из множества встречается в текстовом файле
+# Функ. сортировки по убыванию, возвращает первые 10 значений
+# Функ. вывода на экран самых частовстречаемых в тексте первых 10 слов в файлах +
+# Функ. запуска приложения +
 
 
+# Функ. сортировки слов по частотности и формирование списка/массива ТОП 10
+def get_top_words_list(article):
+    # Передает другой функ. значение article и получает словарь со словами и их частотностью
+    # Пример получаемого словаря: frequency_of_words_dict = { 'слово' : число, 'слово' : число }
+    # Создает список/массив из отсортированных по убыванию по значению ключей словаря
+    # Возвращает срез списка из первых 10 элементов
+
+
+
+# Функ. печати списка из Топ 10 слов
+def print_result(article, top_words_list):
+    print('В статье {0} чаще всего употребляются эти слова {1}'.format(article, top_words_list))
+
+
+# Функ. запуска приложения
+def ten_most_used_words():
+    article_list = ['newsafr.txt', 'newscy.txt', 'newsfr.txt', 'newsit.txt']
+    for article in article_list:
+        top_words_list = get_top_words_list(article)
+        print_result(article, top_words_list) # words_list - это список для конктерной статьи с 10 самыми частоупоминаемыми словами
+
+
+# ten_most_used_words()
