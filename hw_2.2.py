@@ -31,10 +31,10 @@ import chardet
 
 
 def open_and_read_file(article):
-    '''Функция открывает файл с переданным ей названием.
+    '''Функция открывает переданный файл,
 
-    Декодирует его с помощью импортируемой фунции chardet,
-    создает список из всех слов в тексте файла, длинной больше 6 символов
+    декодирует его с помощью импортируемой фунции chardet,
+    создает список из всех слов, длинной больше 6 символов, в файле.
     '''
     result_list = []
     with open(article, 'rb') as f:
@@ -47,55 +47,61 @@ def open_and_read_file(article):
                 result_list.append(word)
     return result_list
 
-# open_and_read_file('newscy.txt')
 
-
-###########
-# Продолжить с этого места. Дописать функ. подсчета кол-ва слов, выводящую словарь с парами "слово:частота"
-###########
 def count_words_in_list(article):
+    '''Функция получает на вход атрибут с названием файла,
+
+    для передачи этого значения функции open_and_read_file(article).
+    Получая от нее список используемых в файле слов, формирует множество,
+    с помощью которого получает значения кол-ва вхождения каждого элемента
+    множества в полученном списке.
+    '''
+    count_words_list = []
     words_lst = open_and_read_file(article)
     set_of_words = set(words_lst)
-    print('set_of_words', set_of_words)
-    print(type(set_of_words))
-
-count_words_in_list('newscy.txt')
-
-
-
-
-
+    for word_of_set in set_of_words:
+        quantity = 0
+        for i in words_lst:
+            if i == word_of_set:
+                quantity += 1
+        count_words_list = count_words_list + [[word_of_set, quantity]]
+    return count_words_list
 
 
-
-# Функ. сортировки слов по частотности и формирование списка/массива ТОП 10
 def get_top_words_list(article):
-    ''' Функция сортирует ключи из словаря по их значению и возвращает
+    ''' Функция сортирует элементы списка по второму значению.
 
-    список отсортированных 10 слов с максимальной частотностью.
-    Для этого функция передает другой функ. значение article и получает с
-    ловарь следующего типа:
-    frequency_of_words_dict = { 'слово' : число, 'слово' : число }
-    Далее этот словарь обрабатывается и формируется список слов по убыванию
-    их частотности. Возвращает срез списка из первых 10 элементов.
+    Элементы списка являются спискамии. Функция возвращает
+    список  из 10 отсортированных слов с максимальной частотностью в
+    порядке убывания.
     '''
-    frequency_of_words_dict = get_frequency_of_words_dict(article)
-    
+    lst = count_words_in_list(article)
+    while True:
+        sorted = True
+        for i in range(len(lst)-1):
+            if lst[i][1] < lst[i+1][1]:
+                lst[i][1], lst[i+1][1] = lst[i+1][1], lst[i][1]
+                sorted = False
+        if sorted:
+            break
+    return lst[:10]
 
 
-
-# Функ. печати списка из Топ 10 слов
 def print_result(article, top_words_list):
-    '''Функция print_result выводит на экран название файла и список из топ 10 слов.'''
-    print('В статье {0} чаще всего употребляются эти слова {1}'.format(article, top_words_list))
+    '''Функция print_result выводит на экран название
+
+    файла и полученный список максимальных значений.
+    '''
+    print('В файле {0} самые высокочастотные слова: {1}\n'.format(article, top_words_list))
 
 
-# Функ. запуска приложения
+
 def ten_most_used_words():
+    '''Функция определяет 10 самых высокочастотных слов с заданных файлах'''
     article_list = ['newsafr.txt', 'newscy.txt', 'newsfr.txt', 'newsit.txt']
     for article in article_list:
         top_words_list = get_top_words_list(article)
-        print_result(article, top_words_list) # words_list - это список для конктерной статьи с 10 самыми частоупоминаемыми словами
+        print_result(article, top_words_list)
 
 
-# ten_most_used_words()
+ten_most_used_words()
